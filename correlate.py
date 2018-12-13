@@ -1,5 +1,5 @@
 # Performs a correlation attack
-import matplotlib as plt
+import matplotlib.pyplot as plt
 
 # Progress bar
 from sys import stdout
@@ -74,7 +74,7 @@ def calc_p_star(u, z):
 # Attempt to guess the initial state of the smallest LFSR, L1, with L = 13
 state = [0] * (length - 1)
 state += [1]
-print(state)
+print("Initial state:", state)
 
 p_map = {}
 highest_p_star = 0
@@ -103,7 +103,7 @@ while count < possible_states:
     if refresh_progress_bar:
         progress = int(count / possible_states * total_bars)
         bar = "[" + '#' * progress + '.' * (total_bars - progress - 1) + "]"
-        text = "\rHighest: %f Progress: %s" % (highest_p_star, bar)
+        text = "\rHighest p*: %f Progress: %s" % (highest_p_star, bar)
         stdout.write(text)
 
     if p_star > 0.9:
@@ -118,3 +118,10 @@ print("\nFound p*: ", highest_p_star, "for initial state:", state)
 # Show progress bar
 
 # Show graph of results
+x = list(range(len(p_map)))
+y = p_map.values()
+
+plt.scatter(x, y)
+plt.xlabel("iterations")
+plt.ylabel("p*")
+plt.show()
