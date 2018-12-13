@@ -12,7 +12,7 @@ z_sequence = ([
     1, 1, 1, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 1, 1, 1,
     1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0,
     1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1,
-    1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 
+    1, 1, 1, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0,
 ])
 
 polynomial = [1, 2, 4, 6, 7, 10, 11, 13]
@@ -20,7 +20,6 @@ length = 13
 
 def hamming(x, y):
     """Computes the hamming distance for two binary arrays"""
-
     distance = 0
     for i in range(len(x)):
         if x[i] != y[i]:
@@ -76,8 +75,10 @@ state = [0] * (length - 1)
 state += [1]
 print("Initial state:", state)
 
+# Iterate through all possible initial states and calculate p* values
 p_map = {}
 highest_p_star = 0
+highest_state = []
 count = 1
 possible_states = 2**(length)
 total_bars = 30
@@ -89,12 +90,13 @@ while count < possible_states:
     p_star = calc_p_star(u_sequence, z_sequence)
 
     # Note down this p_star value
-    p_map[', '.join(str(c) for c in state)] = p_star
+    p_map[str(state)] = p_star
 
     # Note down highest value
     refresh_progress_bar = False
     if p_star > highest_p_star:
         highest_p_star = p_star
+        highest_state = state
         refresh_progress_bar = True
 
     if count % (possible_states // total_bars) == 0:
@@ -113,15 +115,15 @@ while count < possible_states:
     count += 1
 
 # Print out the results
-print("\nFound p*: ", highest_p_star, "for initial state:", state)
+print("\nFound p*: ", highest_p_star, "for initial state:", highest_state)
 
 # Show progress bar
 
 # Show graph of results
-x = list(range(len(p_map)))
-y = p_map.values()
+x_list = list(range(len(p_map)))
+y_list = p_map.values()
 
-plt.scatter(x, y)
+plt.scatter(x_list, y_list)
 plt.xlabel("iterations")
-plt.ylabel("p*")
+plt.ylabel("p* values")
 plt.show()
