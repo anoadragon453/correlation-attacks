@@ -31,6 +31,7 @@ def shift_state(s, new_num):
     num = s[0]
     for i in range(len(s) - 1):
         s[i] = s[i+1]
+    s[-1] = new_num
     return s, num
 
 def compute_keystream(s, p, pL, sL):
@@ -46,9 +47,11 @@ def compute_keystream(s, p, pL, sL):
         sum = 0
         
         # Run xor operations given taps
+        bla = []
         for exponent in p:
             tap = pL - exponent
             sum += s[tap]
+            bla.append(tap)
 
         # Shift state with new value, get popped value
         (s, popped) = shift_state(s, sum % 2)
