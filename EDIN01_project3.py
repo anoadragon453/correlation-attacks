@@ -68,12 +68,19 @@ def compute_keystream(s, p, pL, sL):
 state1 = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 1]
 state2 = [0, 1, 0, 0, 1, 1, 1, 0, 1, 0, 0, 1, 0, 0, 1] 
 state3 = [0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0]
-u_sequence1 = compute_keystream(state1[:], polynomial1, length1, len(z_sequence))
-u_sequence2 = compute_keystream(state2[:], polynomial2, length2, len(z_sequence))
-u_sequence3 = compute_keystream(state3[:], polynomial3, length3, len(z_sequence))
+u_sequence1 = compute_keystream(state1, polynomial1, length1, len(z_sequence))
+u_sequence2 = compute_keystream(state2, polynomial2, length2, len(z_sequence))
+u_sequence3 = compute_keystream(state3, polynomial3, length3, len(z_sequence))
 for ii in range(len(z_sequence)):
-    if u_sequence1[ii] == u_sequence2[ii] == 1 or u_sequence1[ii] == u_sequence3[ii] == 1 or u_sequence2[ii] == u_sequence3[ii] == 1:
-        if z_sequence[ii] == 1:
+    if z_sequence[ii] == 1:
+        if u_sequence1[ii] == u_sequence2[ii] == 1 or u_sequence1[ii] == u_sequence3[ii] == 1 or u_sequence2[ii] == u_sequence3[ii] == 1:
+            x = True
+            continue
+        else:
+            x = False
+            break
+    if z_sequence[ii] == 0:
+        if u_sequence1[ii] == u_sequence2[ii] == 0 or u_sequence1[ii] == u_sequence3[ii] == 0 or u_sequence2[ii] == u_sequence3[ii] == 0:
             x = True
             continue
         else:
